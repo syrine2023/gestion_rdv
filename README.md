@@ -23,11 +23,11 @@ Ce projet est une application web permettant aux patients de gérer leurs rendez
 
 ## Configuration de la Base de Données
 1. Ouvrez phpMyAdmin ([http://localhost/phpmyadmin](http://localhost/phpmyadmin)).
-2. Créez une base de données appelée `gestion_rendezvous`.
-3. Importez le fichier `database.sql` fourni.
+2. Créez une base de données appelée `gestion_rdv`.
+3. Importez le fichier `gestion_rdv.sql` fourni.
 
 ## Utilisation
-1. Accédez au projet via [http://localhost/gestion_rendezvous](http://localhost/gestion_rendezvous).
+1. Accédez au projet via [http://localhost/gestion_rendezvous](http://localhost/gestion_rdv).
 2. Inscrivez-vous en tant que patient et connectez-vous.
 3. Prenez ou annulez vos rendez-vous.
 
