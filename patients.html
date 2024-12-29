@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Polyclinique ESSALEMA</title>
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Polyclinique ESSALEMA</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="patients.html" class="nav-item nav-link">patients</a>
+                <a href="doctors.html" class="nav-item nav-link">doctors</a>
+                <a href="rendezvous.html" class="nav-item nav-link">RENDEZ-VOUS</a>
+            </div>
+        </div>
+    </nav>
+    <script>
+        // Fonction pour récupérer les données des patients depuis le fichier PHP
+        async function fetchPatients() {
+            try {
+                const response = await fetch('patients.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=list',  // Envoi de l'action "list" pour récupérer les patients
+                });
+        
+                const data = await response.json(); // Récupérer les données en JSON
+        
+                const tableBody = document.getElementById('patient-table-body');
+                tableBody.innerHTML = '';
+        
+                if (data.length > 0) {
+                    data.forEach(patient => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${patient.id}</td>
+                            <td>${patient.nom}</td>
+                            <td>${patient.prenom}</td>
+                            <td>${patient.email}</td>
+                            <td>${patient.telephone}</td>
+                            <td>
+                                <button class="btn btn-warning" onclick="openModifyForm(${patient.id})">Modifier</button>
+                                <button class="btn btn-danger" onclick="supprimerPatient(${patient.id})">Supprimer</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    alert("Aucun patient trouvé.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération des données : ", error);
+            }
+        }
+        
+        // Appeler la fonction lorsque la page est complètement chargée
+        window.onload = fetchPatients;
+        
+        // Ajouter un patient
+        function ajouterPatient() {
+            const nom = $('#nom').val();
+            const prenom = $('#prenom').val();
+            const email = $('#email').val();
+            const telephone = $('#telephone').val();
+        
+            $.post('patients.php', {
+                action: 'add',
+                nom: nom,
+                prenom: prenom,
+                email: email,
+                telephone: telephone
+            }, function(response) {
+                const res = JSON.parse(response);
+                if (res.success) {
+                    alert("Patient ajouté avec succès !");
+                    fermerFormulaire();
+                    fetchPatients(); // Recharger la liste des patients
+                } else {
+                    alert("Erreur : " + res.message);
+                }
+            }).fail(function() {
+                alert("Erreur lors de l'ajout du patient.");
+            });
+        }
+        
+        // Supprimer un patient
+        function supprimerPatient(id) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer ce patient ?")) {
+                $.post('patients.php', { action: 'delete', id: id }, function(response) {
+                    const res = JSON.parse(response);
+                    if (res.success) {
+                        alert("Patient supprimé avec succès !");
+                        fetchPatients(); // Recharger la liste des patients
+                    } else {
+                        alert("Erreur : " + res.message);
+                    }
+                }).fail(function() {
+                    alert("Erreur lors de la suppression du patient.");
+                });
+            }
+        }
+        
+        // Ouvrir le formulaire d'ajout
+        function afficherFormulaire() {
+            $('#formContainer').show();
+        }
+        
+        // Fermer le formulaire d'ajout
+        function fermerFormulaire() {
+            $('#formContainer').hide();
+            $('#ajouterPatientForm')[0].reset(); // Réinitialiser le formulaire
+        }
+        
+        // Ouvrir le formulaire de modification
+        function openModifyForm(id) {
+            $.post('patients.php', { action: 'get', id: id }, function(response) {
+                const patient = JSON.parse(response);
+        
+                if (patient) {
+                    $('#modify-patient-id').val(patient.ID);  // Utilisez 'ID' comme dans votre base de données
+                    $('#modify-nom').val(patient.nom);
+                    $('#modify-prenom').val(patient.prenom);
+                    $('#modify-email').val(patient.email);
+                    $('#modify-telephone').val(patient.telephone);
+        
+                    $('#modify-form').show();
+                } else {
+                    alert('Erreur : Patient non trouvé.');
+                }
+            }).fail(function() {
+                alert('Erreur lors de la récupération des données.');
+            });
+        }
+        
+        // Fermer le formulaire de modification
+        function closeModifyForm() {
+            $('#modify-form').hide();
+        }
+        
+ // Soumettre les modifications du patient
+function modifierFormulaire() {
+    const id = $('#modify-patient-id').val();
+    const nom = $('#modify-nom').val();
+    const prenom = $('#modify-prenom').val();
+    const email = $('#modify-email').val();
+    const telephone = $('#modify-telephone').val();
+
+    $.post('patients.php', {
+        action: 'update',
+        id: id,
+        nom: nom,
+        prenom: prenom,
+        email: email,
+        telephone: telephone
+    }, function(response) {
+        const res = JSON.parse(response);
+        if (res.success) {
+            alert('Modification réussie !');
+            fetchPatients(); // Rafraîchir la liste des patients
+            closeModifyForm(); // Fermer le formulaire de modification
+        } else {
+            alert('Erreur : ' + res.message);
+        }
+    }).fail(function() {
+        alert('Erreur lors de la mise à jour.');
+    });
+}
+
+        </script>
+        
+        <div class="container mt-5">
+            <h1>Gestion des Patients</h1>
+            
+            <!-- Bouton Ajouter un Patient -->
+            <button class="btn btn-primary mt-4" onclick="afficherFormulaire()">Ajouter un Patient</button>
+            
+            <!-- Table des patients -->
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patient-table-body">
+                    <!-- Les données des patients seront injectées ici -->
+                </tbody>
+            </table>
+        
+            <!-- Formulaire pour ajouter un patient -->
+            <div id="formContainer" class="mt-4" style="display: none;">
+                <h3>Ajouter un Patient</h3>
+                <form id="ajouterPatientForm">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone">Téléphone</label>
+                        <input type="text" id="telephone" class="form-control" required>
+                    </div>
+                    <button type="button" class="btn btn-success" onclick="ajouterPatient()">Ajouter</button>
+                    <button type="button" class="btn btn-secondary" onclick="fermerFormulaire()">Annuler</button>
+                </form>
+            </div>
+        
+            <!-- Formulaire de modification -->
+            <div id="modify-form" style="display: none;">
+                <h3>Modifier le patient</h3>
+                <form id="modify-patient-form">
+                    <input type="hidden" id="modify-patient-id">
+                    <label for="modify-nom">Nom :</label>
+                    <input type="text" id="modify-nom" required><br>
+                    
+                    <label for="modify-prenom">Prénom :</label>
+                    <input type="text" id="modify-prenom" required><br>
+                    
+                    <label for="modify-email">Email :</label>
+                    <input type="email" id="modify-email" required><br>
+                    
+                    <label for="modify-telephone">Téléphone :</label>
+                    <input type="text" id="modify-telephone" required><br>
+            
+                    <button type="button" class="btn btn-primary" onclick="modifierFormulaire()">Sauvegarder</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModifyForm()">Annuler</button>
+                </form>
+                
+            </div>
+        </div>
+        
+
+    <!-- Footer Start -->
+    <div class="container-fluid footer wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-2">
+            <div class="footer-contact">
+                <div>
+                    <i class="fa fa-map-marker-alt"></i>
+                    <span>Beb Jebli, Sfax, Tunisie</span>
+                </div>
+                <div>
+                    <i class="fa fa-phone-alt"></i>
+                    <span>+216 21 299 194</span>
+                </div>
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <span>reception@essalama.tn</span>
+                </div>
+            </div>
+            <div class="d-flex pt-1 justify-content-center">
+                <a class="btn btn-social" href="https://twitter.com/?lang=fr"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-social" href="https://www.facebook.com/profile.php?id=100064818633503"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-social" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                <a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>
+                    © Copyright 2024 Clinique Essalama - 
+                    <a href="#">Mentions Légales</a> - 
+                    <a href="#">Gestion des cookies</a> - 
+                    <a href="#">Droits & Devoirs</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

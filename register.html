@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Inscription Patient</title>
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container .form-group {
+            margin-bottom: 20px;
+        }
+        .form-container .form-control {
+            border-radius: 8px;
+            box-shadow: none;
+        }
+        .form-container button {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 8px;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px 0;
+        }
+        .footer-contact i {
+            margin-right: 10px;
+        }
+        .footer-contact div {
+            margin-bottom: 10px;
+        }
+        .footer-contact a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Inscription Patient</h2>
+        <form action="register.php" method="POST" id="registerForm">
+            <!-- Nom -->
+            <div class="form-group">
+                <label for="nom">Nom</label>
+                <input type="text" class="form-control" name="nom" id="nom" placeholder="Nom" required>
+            </div>
+
+            <!-- Prénom -->
+            <div class="form-group">
+                <label for="prenom">Prénom</label>
+                <input type="text" class="form-control" name="prenom" id="prenom" placeholder="Prénom" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
+            </div>
+
+            <!-- Téléphone -->
+            <div class="form-group">
+                <label for="telephone">Téléphone</label>
+                <input type="tel" class="form-control" name="telephone" id="telephone" placeholder="Téléphone" required>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+        </form>
+        <p id="success-message" class="text-success" style="display:none;">Votre inscription a été réussie !</p>
+    </div>
+
+    <!-- Footer Start -->
+    <div class="footer">
+        <div class="container">
+            <div class="footer-contact">
+                <div>
+                    <i class="fa fa-map-marker-alt"></i>
+                    <span>Beb Jebli, Sfax, Tunisie</span>
+                </div>
+                <div>
+                    <i class="fa fa-phone-alt"></i>
+                    <span>+216 21 299 194</span>
+                </div>
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <span>reception@essalama.tn</span>
+                </div>
+            </div>
+            <div class="d-flex pt-1 justify-content-center">
+                <a class="btn btn-social" href="https://twitter.com/?lang=fr"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-social" href="https://www.facebook.com/profile.php?id=100064818633503"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-social" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                <a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>
+                    © Copyright 2024 Clinique Essalama -
+                    <a href="#">Mentions Légales</a> -
+                    <a href="#">Gestion des cookies</a> -
+                    <a href="#">Droits & Devoirs</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation en JavaScript -->
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            let email = document.getElementById('email').value;
+            let phone = document.getElementById('telephone').value;
+            
+            // Validation simple pour vérifier que l'email et le téléphone sont valides
+            let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            let phonePattern = /^[0-9]{8,12}$/;
+
+            if (!emailPattern.test(email)) {
+                alert('L\'adresse email n\'est pas valide');
+                event.preventDefault();
+                return;
+            }
+
+            if (!phonePattern.test(phone)) {
+                alert('Le numéro de téléphone n\'est pas valide');
+                event.preventDefault();
+                return;
+            }
+
+            // Si tout est valide, afficher un message de succès
+            document.getElementById('success-message').style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>

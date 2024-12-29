@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Polyclinique ESSALEMA</title>
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar/main.min.css" rel="stylesheet">
+    <style>
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        form input,
+        form select,
+        form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #fff;
+            transition: border-color 0.3s ease-in-out;
+        }
+        
+        form input:focus,
+        form select:focus,
+        form button:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        form button {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        
+        form button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
+
+        #successMessage {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        </style>
+        
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Polyclinique ESSALEMA</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="patients.html" class="nav-item nav-link">patients</a>
+                <a href="doctors.html" class="nav-item nav-link">doctors</a>
+                <a href="rendezvous.html" class="nav-item nav-link">RENDEZ-VOUS</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+    <div class="container">
+        <h1 class="mt-5">Gestion des Rendez-vous</h1>
+
+    <!-- Section de prise de rendez-vous -->
+
+    <h1>Prise de Rendez-vous</h1>
+    <form action="rendezvous.php" method="POST">
+        <label for="patient_nom">Nom du patient :</label>
+        <input type="text" id="patient_nom" name="patient_nom" required><br>
+
+        <label for="patient_prenom">Prénom du patient :</label>
+        <input type="text" id="patient_prenom" name="patient_prenom" required><br>
+
+        
+
+        <select id="medecinId" name="medecin_id">
+            <!-- Options des médecins -->
+        </select>
+        <br>
+        <label for="date">Date :</label>
+        <input type="date" id="date" name="date" required><br>
+
+        <label for="heure">Heure :</label>
+        <input type="time" id="heure" name="heure" required><br>
+
+        <button type="submit">Prendre Rendez-vous</button>
+    </form>
+    <hr>
+
+    <!-- Vue calendrier -->
+         <h3>Calendrier des Rendez-vous</h3>
+        <div id="calendar"></div>
+    </div>
+    <hr>
+    <!-- Modal pour afficher les rendez-vous -->
+    <div class="modal fade" id="appointmentsModal" tabindex="-1" aria-labelledby="appointmentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentsModalLabel">Rendez-vous du jour</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="appointmentsModalContent">
+                <!-- Les rendez-vous seront affichés ici -->
+            </div>
+        </div>
+    </div>
+    </div>
+    <hr>
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid footer wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-2">
+            <div class="footer-contact">
+                <div>
+                    <i class="fa fa-map-marker-alt"></i>
+                    <span>Beb Jebli, Sfax, Tunisie</span>
+                </div>
+                <div>
+                    <i class="fa fa-phone-alt"></i>
+                    <span>+216 21 299 194</span>
+                </div>
+                <div>
+                    <i class="fa fa-envelope"></i>
+                    <span>reception@essalama.tn</span>
+                </div>
+            </div>
+            <div class="d-flex pt-1 justify-content-center">
+                <a class="btn btn-social" href="https://twitter.com/?lang=fr"><i class="fab fa-twitter"></i></a>
+                <a class="btn btn-social" href="https://www.facebook.com/profile.php?id=100064818633503"><i class="fab fa-facebook-f"></i></a>
+                <a class="btn btn-social" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                <a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <p>
+                    © Copyright 2024 Clinique Essalama - 
+                    <a href="#">Mentions Légales</a> - 
+                    <a href="#">Gestion des cookies</a> - 
+                    <a href="#">Droits & Devoirs</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const medecinSelect = document.getElementById("medecinId");
+    
+            
+    
+            // Charger les médecins depuis l'API PHP
+            function chargerMedecins() {
+                fetch("getDoctors.php")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert("Erreur lors de la récupération des médecins.");
+                            return;
+                        }
+                        // Ajouter les médecins à la liste déroulante
+                        data.forEach(medecin => {
+                            const option = document.createElement("option");
+                            option.value = medecin.id;
+                            option.textContent = medecin.name;
+                            medecinSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error("Erreur:", error));
+            }
+    
+            // Appels pour charger les données
+            
+            chargerMedecins();
+        });
+
+
+        
+    </script>
+    
+
+    <script src="js/calendrier.js"></script>
+    <script src="js/rendezvous.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar/main.min.js"></script>
+    <!-- Updated FullCalendar v5+ script -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+</body>
+</html>

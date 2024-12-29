@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Polyclinique ESSALEMA</title>
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="far fa-hospital me-3"></i>Polyclinique ESSALEMA</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="patients.html" class="nav-item nav-link">patients</a>
+                <a href="doctors.html" class="nav-item nav-link">doctors</a>
+                <a href="rendezvous.html" class="nav-item nav-link">RENDEZ-VOUS</a>
+            </div>
+        </div>
+    </nav>
+    <script>
+        // Fonction pour récupérer les données des médecins depuis le fichier PHP
+        async function fetchDoctors() {
+            try {
+                // Modifier l'URL pour pointer vers 'doctors.php'
+                const response = await fetch('doctors.php');
+                const data = await response.json(); // Récupérer les données en JSON
+
+                // Si des médecins sont trouvés, on les affiche dans le tableau
+                if (data.length > 0) {
+                    const tableBody = document.getElementById('doctor-table-body');
+                    tableBody.innerHTML = ''; // On vide le corps du tableau avant d'ajouter de nouvelles lignes
+
+                    data.forEach(doctor => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${doctor.ID}</td>
+                            <td>${doctor.nom}</td>
+                            <td>${doctor.specialite}</td>
+                            <td>
+                                <a href="appointments.php?medecin_id=${doctor.ID}" class="btn btn-primary">Voir les Rendez-vous</a>
+                            </td>
+                        `;
+                        tableBody.appendChild(row); // Ajout de la ligne dans le tableau
+                    });
+                } else {
+                    alert("Aucun médecin trouvé.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération des données : ", error);
+            }
+        }
+
+        // Appeler la fonction lorsque la page est complètement chargée
+        window.onload = fetchDoctors;
+    </script>
+    <div class="container mt-5">
+        <h1>Liste des Médecins</h1>
+        <!-- Tableau des médecins -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Spécialité</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="doctor-table-body">
+                <!-- Les lignes des médecins seront ajoutées ici via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+        <!-- Footer Start -->
+        <div class="container-fluid footer wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-2">
+                <div class="footer-contact">
+                    <div>
+                        <i class="fa fa-map-marker-alt"></i>
+                        <span>Beb Jebli, Sfax, Tunisie</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-phone-alt"></i>
+                        <span>+216 21 299 194</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-envelope"></i>
+                        <span>reception@essalama.tn</span>
+                    </div>
+                </div>
+                <div class="d-flex pt-1 justify-content-center">
+                    <a class="btn btn-social" href="https://twitter.com/?lang=fr"><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-social" href="https://www.facebook.com/profile.php?id=100064818633503"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-social" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                    <a class="btn btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <p>
+                        © Copyright 2024 Clinique Essalama - 
+                        <a href="#">Mentions Légales</a> - 
+                        <a href="#">Gestion des cookies</a> - 
+                        <a href="#">Droits & Devoirs</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+
+    
+        
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+</body>
+</html>
